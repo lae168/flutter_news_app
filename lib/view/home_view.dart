@@ -29,172 +29,23 @@ class _HomeScreenState extends State<HomeScreen> {
     const SettingScreen(),
   ];
 
-  Future<String?> name =
-      SharedPreferencesManager().readFirstName(key: 'firstName');
-  Future<String?> email =
-      SharedPreferencesManager().readEmailOrPhone(key: 'mailOrPhone');
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: _menuOption[_selectedIndex],
-        drawer: Drawer(
-          // backgroundColor: const Color.fromARGB(223, 38, 63, 67),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                decoration: const BoxDecoration(
-                    // color: Color.fromARGB(223, 38, 63, 67),
-                    ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                        onTap: (() {}),
-                        child: const Icon(
-                          Icons.person,
-                          size: 30.0,
-                          color: Colors.blue,
-                        )),
-                     SizedBox(height: size.width/10),
-                    Text(
-                      AuthService().currentUser!.email.toString(),
-                      style: const TextStyle(
-                        color: Colors.blue,
-                        fontSize: 12.0,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const Divider(
-                color: Colors.white,
-              ),
-              ListTile(
-                leading: const Icon(Icons.book),
-                iconColor: Colors.blue,
-                title: Consumer<FontProvider>(
-                  builder: (context, fontProvider, child) {
-                    return Text(
-                      'News',
-                      style: TextStyle(
-                          color: Colors.blue, fontSize: fontProvider.fontSize),
-                    );
-                  },
-                ),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    return const HomeScreen();
-                  }));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.person),
-                iconColor: Colors.blue,
-                title: Consumer<FontProvider>(
-                  builder: (context, fontProvider, child) {
-                    return Text(
-                      'My Account',
-                      style: TextStyle(
-                          color: Colors.blue, fontSize: fontProvider.fontSize),
-                    );
-                  },
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    return const ProfileScreen();
-                  }));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.star_border),
-                iconColor: Colors.blue,
-                title: Consumer<FontProvider>(
-                  builder: (context, fontProvider, child) {
-                    return Text(
-                      'Saved',
-                      style: TextStyle(
-                          color: Colors.blue, fontSize: fontProvider.fontSize),
-                    );
-                  },
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    return const FavScreen();
-                  }));
-                },
-              ),
+        drawer: _setSideDrawer(),
+        bottomNavigationBar: _setBottomNavBar());
+  }
 
-              const Divider(
-                color: Colors.white,
-              ),
-              ListTile(
-                leading: const Icon(Icons.mail, color: Colors.blue),
-                title: Consumer<FontProvider>(
-                  builder: (context, fontProvider, child) {
-                    return Text(
-                      'Contact Us',
-                      style: TextStyle(
-                          color: Colors.blue, fontSize: fontProvider.fontSize),
-                    );
-                  },
-                ),
-                onTap: () async {
-                  String? encodeQueryParameters(Map<String, String> params) {
-                    return params.entries
-                        .map((MapEntry<String, String> e) =>
-                            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                        .join('&');
-                  }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
-                  final Uri emailUri = Uri(
-                    scheme: "mailto",
-                    path: "laenandaraung168@gmail.com",
-                    query: encodeQueryParameters(<String, String>{
-                      'subject': 'Example Subject & Symbols are allowed!',
-                    }),
-                  );
-
-                  try {
-                    await launchUrl(emailUri);
-                  } catch (e) {
-                    print(e.toString());
-                  }
-                },
-              ),
-              //
-              const Divider(
-                color: Colors.white,
-              ),
-              ListTile(
-                leading: const Icon(Icons.lock_open, color: Colors.blue),
-                title: Consumer<FontProvider>(
-                  builder: (context, fontProvider, child) {
-                    return Text(
-                      'LogOut',
-                      style: TextStyle(
-                          color: Colors.blue, fontSize: fontProvider.fontSize),
-                    );
-                  },
-                ),
-                onTap: () {
-                  signOut();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    return const LoginScreen();
-                  }));
-                },
-              )
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
+  // THIS IS BOTTOM NAV BAR
+  Widget _setBottomNavBar(){
+    return BottomNavigationBar(
             // backgroundColor: const Color.fromARGB(223, 38, 63, 67),
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.blue,
@@ -218,12 +69,184 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: 'Setting',
                 backgroundColor: Color.fromARGB(223, 38, 63, 67),
               ),
-            ]));
+            ]);
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+
+  // THIS IS SIDE DRAWER
+  Widget _setSideDrawer() {
+    Size size = MediaQuery.of(context).size;
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                    onTap: (() {}),
+                    child: const Icon(
+                      Icons.person,
+                      size: 30.0,
+                      color: Colors.blue,
+                    )),
+                SizedBox(height: size.width / 10),
+
+                // THIS IS USER'S EMAIL ACCOUNT WHEN HE OR SHE LOGIN
+                Text(
+                  AuthService().currentUser!.email.toString(),
+                  style: const TextStyle(
+                    color: Colors.blue,
+                    fontSize: 12.0,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const Divider(
+            color: Colors.white,
+          ),
+
+          // TO GO TO NEWS VIEWS
+          ListTile(
+            leading: const Icon(Icons.book),
+            iconColor: Colors.blue,
+            title: Consumer<FontProvider>(
+              builder: (context, fontProvider, child) {
+                return Text(
+                  'News',
+                  style: TextStyle(
+                      color: Colors.blue, fontSize: fontProvider.fontSize),
+                );
+              },
+            ),
+            // GO STRAIGHT TO HomeScreen
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const HomeScreen();
+              }));
+            },
+          ),
+
+          // FOR PROFILE VIEW
+          ListTile(
+            leading: const Icon(Icons.person),
+            iconColor: Colors.blue,
+            title: Consumer<FontProvider>(
+              builder: (context, fontProvider, child) {
+                return Text(
+                  'My Account',
+                  style: TextStyle(
+                      color: Colors.blue, fontSize: fontProvider.fontSize),
+                );
+              },
+            ),
+
+            // GO STRAIGHT TO ProfileScreen
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const ProfileScreen();
+              }));
+            },
+          ),
+
+          // FOR FAVOURITE ARTICLE VIEW
+          ListTile(
+            leading: const Icon(Icons.star_border),
+            iconColor: Colors.blue,
+            title: Consumer<FontProvider>(
+              builder: (context, fontProvider, child) {
+                return Text(
+                  'Saved',
+                  style: TextStyle(
+                      color: Colors.blue, fontSize: fontProvider.fontSize),
+                );
+              },
+            ),
+            // GO STRAIGHT TO FavScreen
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const FavScreen();
+              }));
+            },
+          ),
+
+          const Divider(
+            color: Colors.white,
+          ),
+
+          // TO CONTACT TO DEVELOPER
+          ListTile(
+            leading: const Icon(Icons.mail, color: Colors.blue),
+            title: Consumer<FontProvider>(
+              builder: (context, fontProvider, child) {
+                return Text(
+                  'Contact Us',
+                  style: TextStyle(
+                      color: Colors.blue, fontSize: fontProvider.fontSize),
+                );
+              },
+            ),
+
+            // GO STRAIGHT TO MAIL BOX
+            onTap: () async {
+              String? encodeQueryParameters(Map<String, String> params) {
+                return params.entries
+                    .map((MapEntry<String, String> e) =>
+                        '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                    .join('&');
+              }
+
+              final Uri emailUri = Uri(
+                scheme: "mailto",
+                path: "laenandaraung168@gmail.com",
+                query: encodeQueryParameters(<String, String>{
+                  'subject': 'Example Subject & Symbols are allowed!',
+                }),
+              );
+
+              try {
+                await launchUrl(emailUri);
+              } catch (e) {
+                print(e.toString());
+              }
+            },
+          ),
+          //
+          const Divider(
+            color: Colors.white,
+          ),
+
+          // TO LOG OUT FROM ACCOUNT
+          ListTile(
+            leading: const Icon(Icons.lock_open, color: Colors.blue),
+            title: Consumer<FontProvider>(
+              builder: (context, fontProvider, child) {
+                return Text(
+                  'LogOut',
+                  style: TextStyle(
+                      color: Colors.blue, fontSize: fontProvider.fontSize),
+                );
+              },
+            ),
+            onTap: () {
+              signOut();
+
+              //  Go Straight to LogIn Screen
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const LoginScreen();
+              }));
+            },
+          )
+        ],
+      ),
+    );
   }
 }

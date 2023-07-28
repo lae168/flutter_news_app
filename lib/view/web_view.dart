@@ -69,9 +69,7 @@ class _WebViewState extends State<WebView> {
   }
 
   AppBar _showAppBar() {
-    
     return AppBar(
-     
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back,
@@ -84,7 +82,6 @@ class _WebViewState extends State<WebView> {
         },
         iconSize: 30,
       ),
-      
       iconTheme: const IconThemeData(color: Colors.blue),
       elevation: 0,
       title: const Text(

@@ -1,5 +1,4 @@
 import 'package:fb_ui_prj/view/login_view.dart';
-
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 
@@ -42,10 +41,7 @@ class SignUpScreenState extends State<SignUpScreen> {
               gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              // Color.fromARGB(255, 55, 159, 244)
-              // Color.fromARGB(223, 38, 63, 67),
-            ],
+            colors: [],
             stops: [0.1], // setting color points
           )),
         ),
@@ -66,19 +62,17 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    
                     _labelText("Email"),
                     _emailContainer(),
                     _sizedBox(20),
                     _labelText("Password"),
                     _passwordContainer(),
-                    
-                   
                     _errMsg()
                   ],
                 ),
                 _sizedBox(20),
                 _signUpBtn(),
+                _sizedBox(20),
                 _loginBtn(),
               ],
             ),
@@ -91,7 +85,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   Widget _signUpBtn() {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.width/4,
+      height: size.width / 4,
       padding: const EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: ElevatedButton(
@@ -116,7 +110,10 @@ class SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _errMsg() {
-    return Text(errMsg == '' ? '' : "$errMsg",style: const TextStyle(color: Colors.red),);
+    return Text(
+      errMsg == '' ? '' : "$errMsg",
+      style: const TextStyle(color: Colors.red),
+    );
   }
 
   Widget _titleText() {
@@ -140,8 +137,8 @@ class SignUpScreenState extends State<SignUpScreen> {
           style: TextStyle(fontSize: 12, color: Colors.white),
         ),
         SizedBox(
-            width: size.width/5,
-            height: size.width/12,
+            width: size.width / 5,
+            height: size.width / 12,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(223, 38, 63, 67),
@@ -176,7 +173,7 @@ class SignUpScreenState extends State<SignUpScreen> {
               offset: Offset(0, 2),
             ),
           ]),
-      height: size.width/6.5,
+      height: size.width / 6.5,
       child: TextField(
         controller: _passwordController,
         obscureText: true,
@@ -198,8 +195,6 @@ class SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  
-
   Widget _emailContainer() {
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -215,7 +210,7 @@ class SignUpScreenState extends State<SignUpScreen> {
               offset: Offset(0, 2),
             ),
           ]),
-      height: size.width/6.5,
+      height: size.width / 6.5,
       child: TextField(
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,

@@ -14,7 +14,17 @@ class FeedScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final List<List<String>> categorizedData = [
+    ['View 1-1', 'View 1-2', 'View 1-3', 'View 1-4', 'View 1-5'],
+    ['View 2-1', 'View 2-2', 'View 2-3', 'View 2-4', 'View 2-5'],
+    ['View 3-1', 'View 3-2', 'View 3-3', 'View 3-4', 'View 3-5'],
+    ['View 4-1', 'View 4-2', 'View 4-3', 'View 4-4', 'View 4-5'],
+    ['View 5-1', 'View 5-2', 'View 5-3', 'View 5-4', 'View 5-5'],
+  ];
+  final _pageController = PageController(initialPage: 0);
   List<String> categories = [
     "Japan",
     "World",
@@ -22,9 +32,21 @@ class _FeedScreenState extends State<FeedScreen> {
     "Technology",
     "Entertainment"
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 1, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        selectedIndex = _tabController.index;
+      });
+    });
+  }
+
+  // THIS IS APP BAR
   AppBar _showAppBar() {
     return AppBar(
-      // backgroundColor: const Color.fromARGB(223, 38, 63, 67),
       leading: IconButton(
         icon: const Icon(
           Icons.menu,
@@ -55,46 +77,55 @@ class _FeedScreenState extends State<FeedScreen> {
     const TechArticleView(),
     const EntArticleView()
   ];
+
   Widget _buildCategory(int index) {
-    Size size = MediaQuery.of(context).size;
     return GestureDetector(
         onTap: () {
           setState(() {
             selectedIndex = index;
+            _pageController.animateToPage(index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.linear);
           });
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.all(0),
           child: Column(
             children: [
               Consumer<FontProvider>(builder: (context, fontProvider, child) {
-                return Text(
-                  categories[index],
-                  style: TextStyle(
-                      fontSize: fontProvider.fontSize,
-                      fontWeight: FontWeight.normal,
-                      color:
-                          selectedIndex == index ? Colors.blue : Colors.white),
+                return TabBar(
+                  padding: const EdgeInsets.all(0),
+                  indicator: const BoxDecoration(
+                    color: Colors.white,
+                    // borderRadius: BorderRadius.all(radius);
+                  ),
+                  controller: _tabController,
+                  isScrollable: true,
+                  tabs: [
+                    Text(
+                      categories[index],
+                      style: TextStyle(
+                          fontSize: fontProvider.fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: selectedIndex == index
+                              ? Colors.blue
+                              : Colors.black),
+                    ),
+                  ],
                 );
               }),
-              Container(
-                margin: const EdgeInsets.only(top: 20.0 / 4), //top padding 5
-                height: size.height / 200,
-                width: size.height / 5000,
-                color:
-                    selectedIndex == index ? Colors.blue : Colors.transparent,
-              )
             ],
           ),
         ));
   }
 
+//   HORIZONTAL SCROLL CATEGORY LIST
   Widget _categoryList() {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         SizedBox(
-          height: size.width / 11,
+          height: size.width / 13,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categories.length,
@@ -106,16 +137,25 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: _showAppBar(),
-        // backgroundColor: const Color.fromARGB(223, 38, 63, 67),
+        appBar: _showAppBar(), //APPBAR
         body: Column(children: [
-          _categoryList(),
-          SizedBox(
-            height: size.height / 1.28,
-            child: _menuOption[selectedIndex],
-          )
+          _categoryList(), // CATEGORY SCROLL X-AXIS
+          _newsPageViews() // News Page View
         ]));
+  }
+
+  Widget _newsPageViews() {
+    return Expanded(
+      child: PageView.builder(
+          controller: _pageController,
+          itemCount: _menuOption.length,
+          onPageChanged: (index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          itemBuilder: (context, index) => _menuOption[selectedIndex]),
+    );
   }
 }

@@ -24,7 +24,7 @@ class _TechArticleViewState extends State<TechArticleView> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: _showListView() // datas will be shown in list if datas axist
+        child: _showListView() // datas will be shown in list if datas axisted
 
         );
   }
@@ -61,16 +61,16 @@ class _TechArticleViewState extends State<TechArticleView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                     SizedBox(
-                      height: size.height / 7, // COPY HERE
-                      width: size.height / 9, // COPY HERE
+                      height: size.height / 7, 
+                      width: size.height / 9, 
                       child: Image.network(image.toString()),
                     ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                              width: 1.9 * size.width / 3, // COPY HERE
-                              height: size.height / 9, // COPY HERE
+                              width: 1.9 * size.width / 3, 
+                              height: size.height / 9, 
                               padding: const EdgeInsets.only(
                                   left: 16.0, right: 16.0, top: 20.0),
                               child: (Text(description.toString(),

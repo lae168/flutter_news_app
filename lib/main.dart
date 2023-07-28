@@ -40,9 +40,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [ 
+        providers: [
           ChangeNotifierProvider(
-            create:(context) => FavoriteProvider(),
+            create: (context) => FavoriteProvider(),
           ),
           ChangeNotifierProvider(
             create: (_) => ThemeProvider(),
