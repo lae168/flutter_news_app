@@ -1,33 +1,4 @@
-// import 'package:fb_ui_prj/model/article.dart';
-// import 'package:flutter/foundation.dart';
-
-// class FavouriteProvider extends ChangeNotifier {
-//   List<Article> _articles = [];
-//   List<Article> get articles => _articles;
-
-//   void toggleFavourite(Article article) {
-//     final isExist = _articles.contains(article);
-//     if (isExist) {
-//       _articles.remove(article);
-//     } else {
-//       _articles.add(article);
-//     }
-//     notifyListeners();
-//   }
-
-//   bool isExist(Article article) {
-//     final isExist = _articles.contains(article);
-//     return isExist;
-//   }
-
-//   void clearFavourite() {
-//     _articles = [];
-//     notifyListeners();
-//   }
-// }
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/article.dart';
@@ -49,12 +20,13 @@ class FavoriteProvider with ChangeNotifier {
     _favorites = favoriteStrings.map((favString) {
       final favMap = json.decode(favString);
       return Article(
-          author: favMap['author'],
-          content: favMap['content'],
-          description: favMap['description'],
-          title: favMap['title'],
-          url: favMap['url'],
-          urlToImage: favMap['urlToImage'],);
+        author: favMap['author'],
+        content: favMap['content'],
+        description: favMap['description'],
+        title: favMap['title'],
+        url: favMap['url'],
+        urlToImage: favMap['urlToImage'],
+      );
     }).toList();
     notifyListeners();
   }
@@ -62,8 +34,10 @@ class FavoriteProvider with ChangeNotifier {
   Future<void> _saveFavorites() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> favoriteStrings = _favorites
-        .map((article) => json.encode(
-            {'urlToImage': article.urlToImage, 'description': article.description}))
+        .map((article) => json.encode({
+              'urlToImage': article.urlToImage,
+              'description': article.description
+            }))
         .toList();
     await prefs.setStringList(_favoriteKey, favoriteStrings);
   }

@@ -2,7 +2,12 @@ import 'package:fb_ui_prj/const/theme_data_const.dart';
 import 'package:fb_ui_prj/provider/fav_provider.dart';
 import 'package:fb_ui_prj/provider/font_provider.dart';
 import 'package:fb_ui_prj/provider/theme_provider.dart';
+import 'package:fb_ui_prj/view/business_article_view.dart';
+import 'package:fb_ui_prj/view/ent_article_view.dart';
+import 'package:fb_ui_prj/view/japan_article_view.dart';
 import 'package:fb_ui_prj/view/profile_view.dart';
+import 'package:fb_ui_prj/view/tech_article_view.dart';
+import 'package:fb_ui_prj/view/world_article_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fb_ui_prj/view/main_app_view.dart';
 import 'package:flutter/material.dart';
@@ -45,14 +50,30 @@ class _MyAppState extends State<MyApp> {
             create: (context) => FavoriteProvider(),
           ),
           ChangeNotifierProvider(
-            create: (_) => ThemeProvider(),
+            create: (context) => ThemeProvider(),
           ),
           ChangeNotifierProvider(
             create: (context) => FontProvider(),
           ),
           ChangeNotifierProvider(
             create: (context) => ProfileProvider(),
-          )
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RefreshProviderForJapanArticles(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RefreshProviderForWorldArticles(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RefreshProviderForBusinessArticles(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RefreshProviderForTechArticles(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RefreshProviderForEntArticles(),
+          ),
+
         ],
         builder: (context, child) {
           final provider = Provider.of<ThemeProvider>(context);
