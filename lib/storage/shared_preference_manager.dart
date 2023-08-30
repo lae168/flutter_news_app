@@ -34,21 +34,18 @@ class SharedPreferencesManager {
   }
 
   Future<String?> readFirstName({required String key}) async {
-    //every key must be String
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? result = prefs.getString(key);
     return result;
   }
 
   Future<String?> readLastName({required String key}) async {
-    //every key must be String
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? result = prefs.getString(key);
     return result;
   }
 
   Future<String?> readEmailOrPhone({required String key}) async {
-    //every key must be String
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? result = prefs.getString(key);
     return result;
@@ -77,16 +74,24 @@ class SharedPreferencesManager {
   }
 
   static const String THEME_STATUS = "THEMESTATUS";
-  
-  setDarkTheme(bool value) async{
+
+  setDarkTheme(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(THEME_STATUS, value);
   }
 
-  Future<bool> getDarkTheme() async{
+  Future<bool> getDarkTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool(THEME_STATUS) ?? false;
   }
 
+  Future<void> saveProfilePicture(String imageUri) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profilePicture', imageUri);
+  }
 
+  Future<String?> getProfilePicture() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('profilePicture');
+  }
 }

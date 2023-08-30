@@ -1,6 +1,5 @@
 import 'package:fb_ui_prj/storage/shared_preference_manager.dart';
 import 'package:fb_ui_prj/view/home_view.dart';
-
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'signup_view.dart';
@@ -17,7 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
   // bool _rememberMe = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -125,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 40,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(223, 38, 63, 67),
+                backgroundColor: const Color.fromARGB(223, 38, 63, 67),
               ),
               onPressed: () {
                 Navigator.pushReplacement(context,

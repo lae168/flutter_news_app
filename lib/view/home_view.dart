@@ -1,4 +1,3 @@
-import 'package:fb_ui_prj/storage/shared_preference_manager.dart';
 import 'package:fb_ui_prj/view/feeds_view.dart';
 import 'package:fb_ui_prj/view/fav_article_view.dart';
 import 'package:fb_ui_prj/view/login_view.dart';
@@ -7,6 +6,7 @@ import 'package:fb_ui_prj/view/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/font_provider.dart';
+import '../provider/propic_provider.dart';
 import '../services/auth_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,38 +44,41 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // THIS IS BOTTOM NAV BAR
-  Widget _setBottomNavBar(){
+  Widget _setBottomNavBar() {
     return BottomNavigationBar(
-            // backgroundColor: const Color.fromARGB(223, 38, 63, 67),
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
-            iconSize: 30,
-            onTap: _onItemTapped,
-            elevation: 5,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_max),
-                label: 'Feeds',
-                backgroundColor: Color.fromARGB(223, 38, 63, 67),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-                backgroundColor: Color.fromARGB(223, 38, 63, 67),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Setting',
-                backgroundColor: Color.fromARGB(223, 38, 63, 67),
-              ),
-            ]);
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        iconSize: 30,
+        onTap: _onItemTapped,
+        elevation: 5,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_max),
+            label: 'Feeds',
+            backgroundColor: Color.fromARGB(223, 38, 63, 67),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+            backgroundColor: Color.fromARGB(223, 38, 63, 67),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Setting',
+            backgroundColor: Color.fromARGB(223, 38, 63, 67),
+          ),
+        ]);
   }
-
 
   // THIS IS SIDE DRAWER
   Widget _setSideDrawer() {
     Size size = MediaQuery.of(context).size;
+    Provider.of<ProfilePictureProvider>(context, listen: false)
+        .loadProfilePicture();
+
+    String? selectedPictureUri =
+        Provider.of<ProfilePictureProvider>(context).selectedPictureUri;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -86,16 +89,20 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                    onTap: (() {}),
-                    child: const Icon(
-                      Icons.person,
-                      size: 30.0,
-                      color: Colors.blue,
-                    )),
-                SizedBox(height: size.width / 10),
+                // THIS IS PROFILE PICTURE
+                selectedPictureUri != null
+                    ? Container(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                        child: Image.network(selectedPictureUri),
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 30,
+                        color: Colors.blue,
+                      ),
 
-                // THIS IS USER'S EMAIL ACCOUNT WHEN HE OR SHE LOGIN
+                // THIS IS USER'S EMAIL ACCOUNT WHEN USER LOGINS
                 Text(
                   AuthService().currentUser!.email.toString(),
                   style: const TextStyle(
@@ -105,6 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
+          ),
+
+          const SizedBox(
+            height: 80,
           ),
           const Divider(
             color: Colors.white,

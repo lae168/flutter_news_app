@@ -1,13 +1,13 @@
+import 'dart:io';
 import 'package:fb_ui_prj/services/auth_service.dart';
 import 'package:fb_ui_prj/storage/shared_preference_manager.dart';
-import 'package:fb_ui_prj/view/signup_view.dart';
-import 'package:fb_ui_prj/view/user_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 import '../model/profile_model.dart';
 import '../provider/profile_provider.dart';
-
+import '../provider/propic_provider.dart';
 import 'edit_profile_view.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,7 +18,41 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late String imageUrl = "";
+  String imageUrl = "";
+
+  void pickUploadImage() async {
+    final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 75);
+
+    Reference ref = FirebaseStorage.instance.ref().child("profile_img.png");
+    await ref.putFile(File(image!.path));
+    ref.getDownloadURL().then((value) {
+      print(value);
+      setState(() {
+        imageUrl = value;
+      });
+      SharedPreferencesManager()
+          .saveProfilePicture(value); //  Save to shared preferences
+     
+    // EDIT CODE HERE 
+      Provider.of<ProfilePictureProvider>(context, listen: false)
+          .setProfilePicture(value);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve saved profile picture URI when the widget initializes
+    SharedPreferencesManager().getProfilePicture().then((uri) {
+      setState(() {
+        imageUrl = uri!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +98,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
               height: double.infinity,
               child: ListView(
-                  // physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
                     vertical: 20,
@@ -77,14 +110,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-// ADDD CODE HERE  =>>>>
-                              // UserImage(
-                              //   onFileChanged: (imageUrl) {
-                              //     setState(() {
-                              //       this.imageUrl = imageUrl;
-                              //     });
-                              //   },
-                              // ),
+                              // PROFILE PICTURE
+                              GestureDetector(
+                                onTap: () {
+                                  pickUploadImage();
+                                },
+                                child: Container(
+                                  width: 3000,
+                                  height: 100,
+                                  alignment: Alignment.center,
+                                  child: Center(
+                                    child: imageUrl == ""
+                                        ? const Icon(
+                                            Icons.person,
+                                            size: 10,
+                                            color: Colors.blue,
+                                          )
+                                        : Image.network(imageUrl),
+                                  ),
+                                ),
+                              ),
 
                               // NAME
                               Container(
@@ -114,6 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                 ),
                               ),
+
                               // PHONE
                               Container(
                                 height: size.width / 5,
@@ -145,6 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                 ),
                               ),
+
                               // EMAIL
                               Container(
                                 height: size.width / 5,
@@ -174,10 +221,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                 ),
                               ),
+
                               SizedBox(
                                 height: size.width / 8,
                               ),
-                              //EDIT
+
+                              //EDIT BUTTON
                               Container(
                                   decoration: BoxDecoration(
                                       color: Colors.white,

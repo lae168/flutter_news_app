@@ -12,9 +12,9 @@ List<Article>? articles = [];
 class RefreshProviderForWorldArticles extends ChangeNotifier {
   late BuildContext context;
   List<Article> articleList = [];
-  int max_count = 3;
+  int max_count = 10;
   RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   AticleViewModel() {
     _initArticleViewModel();

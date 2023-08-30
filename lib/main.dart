@@ -1,6 +1,7 @@
 import 'package:fb_ui_prj/const/theme_data_const.dart';
 import 'package:fb_ui_prj/provider/fav_provider.dart';
 import 'package:fb_ui_prj/provider/font_provider.dart';
+import 'package:fb_ui_prj/provider/propic_provider.dart';
 import 'package:fb_ui_prj/provider/theme_provider.dart';
 import 'package:fb_ui_prj/view/business_article_view.dart';
 import 'package:fb_ui_prj/view/ent_article_view.dart';
@@ -73,7 +74,9 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(
             create: (_) => RefreshProviderForEntArticles(),
           ),
-
+          ChangeNotifierProvider(
+            create: (context) => ProfilePictureProvider(),
+          ),
         ],
         builder: (context, child) {
           final provider = Provider.of<ThemeProvider>(context);
