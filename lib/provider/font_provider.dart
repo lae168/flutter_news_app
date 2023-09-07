@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../storage/shared_preference_manager.dart';
-
 class FontProvider extends ChangeNotifier {
   late SharedPreferences _preferences;
 

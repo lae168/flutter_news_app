@@ -11,4 +11,6 @@ class ThemeProvider extends ChangeNotifier {
     darkThemePrefs.setDarkTheme(value);
     notifyListeners();
   }
+
+ 
 }

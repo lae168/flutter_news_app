@@ -60,19 +60,19 @@ class _MyAppState extends State<MyApp> {
             create: (context) => ProfileProvider(),
           ),
           ChangeNotifierProvider(
-            create: (_) => RefreshProviderForJapanArticles(),
+            create: (context) => RefreshProviderForJapanArticles(),
           ),
           ChangeNotifierProvider(
-            create: (_) => RefreshProviderForWorldArticles(),
+            create: (context) => RefreshProviderForWorldArticles(),
           ),
           ChangeNotifierProvider(
-            create: (_) => RefreshProviderForBusinessArticles(),
+            create: (context) => RefreshProviderForBusinessArticles(),
           ),
           ChangeNotifierProvider(
-            create: (_) => RefreshProviderForTechArticles(),
+            create: (context) => RefreshProviderForTechArticles(),
           ),
           ChangeNotifierProvider(
-            create: (_) => RefreshProviderForEntArticles(),
+            create: (context) => RefreshProviderForEntArticles(),
           ),
           ChangeNotifierProvider(
             create: (context) => ProfilePictureProvider(),

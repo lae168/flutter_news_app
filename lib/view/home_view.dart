@@ -106,13 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 // THIS IS PROFILE PICTURE
                 selectedPictureUri != null
                     ? Container(
-                        width: 80.0, // Width of the circular container
-                        height: 80.0, // Height of the circular container
+                        width: 80.0, 
+                        height: 80.0, 
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            // color: Colors.blue, // Border color (optional)
-                            width: 2.0, // Border width (optional)
+                          width: 2.0, 
                           ),
                         ),
 

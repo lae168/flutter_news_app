@@ -94,25 +94,36 @@ class _FeedScreenState extends State<FeedScreen>
             children: [
               Consumer<FontProvider>(builder: (context, fontProvider, child) {
                 return TabBar(
-                  padding: const EdgeInsets.all(0),
-                  indicator: const BoxDecoration(
-                    color: Colors.white,
-                    // borderRadius: BorderRadius.all(radius);
-                  ),
-                  controller: _tabController,
-                  isScrollable: true,
-                  tabs: [
-                    Text(
-                      categories[index],
-                      style: TextStyle(
-                          fontSize: fontProvider.fontSize,
-                          fontWeight: FontWeight.bold,
-                          color: selectedIndex == index
-                              ? Colors.blue
-                              : Colors.black),
+                    padding: const EdgeInsets.all(0),
+                    indicator: const BoxDecoration(
+                      color: Colors.white,
                     ),
-                  ],
-                );
+                    controller: _tabController,
+                    isScrollable: true,
+                    tabs: [
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                          },
+                          child:  Column(
+                                children: [
+                                  Consumer<FontProvider>(
+                                      builder: (context, fontProvider, child) {
+                                    return Text(
+                                      categories[index],
+                                      style: TextStyle(
+                                          fontSize: fontProvider.fontSize,
+                                          fontWeight: FontWeight.normal,
+                                          color: selectedIndex == index
+                                              ? Colors.blue
+                                              : Colors.black),
+                                    );
+                                  }),
+                                ],
+                              ))
+                    ]);
               }),
             ],
           ),
