@@ -10,6 +10,8 @@ import '../provider/propic_provider.dart';
 import '../services/auth_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../storage/shared_preference_manager.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -28,6 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
     const SettingScreen(),
   ];
+
+  String imageUrl = "";
+
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve saved profile picture URI when the widget initializes
+    SharedPreferencesManager().getProfilePicture().then((uri) {
+      setState(() {
+        imageUrl = uri!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // THIS IS SIDE DRAWER
   Widget _setSideDrawer() {
-    Size size = MediaQuery.of(context).size;
     Provider.of<ProfilePictureProvider>(context, listen: false)
         .loadProfilePicture();
 
@@ -92,9 +106,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 // THIS IS PROFILE PICTURE
                 selectedPictureUri != null
                     ? Container(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                        child: Image.network(selectedPictureUri),
+                        width: 80.0, // Width of the circular container
+                        height: 80.0, // Height of the circular container
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            // color: Colors.blue, // Border color (optional)
+                            width: 2.0, // Border width (optional)
+                          ),
+                        ),
+
+                        child: ClipOval(
+                          child: Image.network(
+                            selectedPictureUri,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       )
                     : const Icon(
                         Icons.person,
@@ -114,9 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          const SizedBox(
-            height: 80,
-          ),
           const Divider(
             color: Colors.white,
           ),
